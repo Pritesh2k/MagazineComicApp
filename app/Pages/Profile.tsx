@@ -51,7 +51,7 @@ function Profile() {
             </button>
 
             {/* Content Box */}
-            <div className="absolute inset-x-0 top-105 -translate-y-1/2
+            <div className="absolute inset-x-0 top-105 -translate-y-70
                 w-screen h-[65%] rounded-lg mx-auto overflow-hidden">
 
                 <div ref={contentRef} className="w-full h-full">
@@ -60,11 +60,11 @@ function Profile() {
             </div>
 
             {/* Bottom Button Bar */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2
-                      w-full max-w-[500px] h-40 flex items-start justify-around
-                      p-5 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg">
+            <div className="absolute bottom-5 left-1/2 -translate-x-1/2
+                      w-[95vw] h-40 flex items-start justify-around
+                      p-5 bg-red-500/80 backdrop-blur-md rounded-2xl shadow-lg">
 
-                <div className="flex justify-center w-full gap-8">
+                <div className="flex justify-center w-full gap-8 mt-10">
                     <button
                         onClick={() => setActiveTab("edit")}
                         className="w-10 h-10 rounded-full bg-white/30 backdrop-blur-md flex items-center justify-center text-xs shadow-md"

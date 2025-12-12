@@ -25,8 +25,8 @@ function EditProfile() {
   const [saveMessage, setSaveMessage] = useState("");
   const [showSaveMessage, setShowSaveMessage] = useState(false);
 
-  // Track if any changes have been made
-  const [hasChanges, setHasChanges] = useState(false);
+  // Track if manual fields changed
+  const [manualChanges, setManualChanges] = useState(false);
 
   // GSAP animation
   useEffect(() => {
@@ -41,7 +41,7 @@ function EditProfile() {
     }
   }, []);
 
-  // Handle profile picture change
+  // Handle profile picture change (auto-save)
   const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -51,7 +51,9 @@ function EditProfile() {
 
       setLabelText("Image Selected!");
       setIsImageSelected(true);
-      setHasChanges(true);
+
+      // Auto-save profile picture
+      setUser({ ...user, profilePic: previewURL });
     }
   };
 
@@ -66,32 +68,28 @@ function EditProfile() {
     }
   }, [isImageSelected]);
 
-  // Auto-save when changes happen
+  // Auto-save for DOB and Gender
   useEffect(() => {
-    if (!hasChanges) return; // Only save if changes have been made
+    setUser({ ...user, dob, gender });
+  }, [dob, gender, setUser]);
 
-    setUser({
-      firstName,
-      username,
-      email,
-      dob,
-      gender,
-      profilePic: preview,
-    });
+  // Handle manual input change
+  const handleManualChange = (setter: React.Dispatch<React.SetStateAction<any>>) => (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setter(e.target.value);
+    setManualChanges(true);
+  };
 
+  // Manual save button handler
+  const handleManualSave = () => {
+    setUser({ ...user, firstName, username, email });
     setSaveMessage("Changes saved!");
     setShowSaveMessage(true);
+    setManualChanges(false);
 
     const timer = setTimeout(() => setShowSaveMessage(false), 3000);
     return () => clearTimeout(timer);
-  }, [firstName, username, email, dob, gender, preview, setUser, hasChanges]);
-
-  // Mark changes when any input changes
-  const handleInputChange = (setter: React.Dispatch<React.SetStateAction<any>>) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setter(e.target.value);
-    setHasChanges(true);
   };
 
   return (
@@ -123,7 +121,7 @@ function EditProfile() {
         </label>
       </div>
 
-      {/* Success message with fade effect */}
+      {/* Success message */}
       {saveMessage && (
         <div
           className={`text-green-700 font-medium text-center mt-2 transition-opacity duration-500 ${
@@ -135,13 +133,14 @@ function EditProfile() {
       )}
 
       {/* Form Fields */}
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-4 mt-4 mb-5">
+        {/* Manual Save Fields */}
         <label className="flex flex-col gap-1">
           <span className="font-semibold text-gray-800">First Name</span>
           <input
             type="text"
             value={firstName}
-            onChange={handleInputChange(setFirstName)}
+            onChange={handleManualChange(setFirstName)}
             placeholder="Enter first name"
             className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           />
@@ -152,7 +151,7 @@ function EditProfile() {
           <input
             type="text"
             value={username}
-            onChange={handleInputChange(setUsername)}
+            onChange={handleManualChange(setUsername)}
             placeholder="Enter username"
             className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           />
@@ -163,18 +162,29 @@ function EditProfile() {
           <input
             type="email"
             value={email}
-            onChange={handleInputChange(setEmail)}
+            onChange={handleManualChange(setEmail)}
             placeholder="Enter email"
             className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           />
         </label>
 
+        {manualChanges && (
+          <button
+            type="button"
+            onClick={handleManualSave}
+            className="mt-2 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 transition-colors"
+          >
+            Save Changes
+          </button>
+        )}
+
+        {/* Auto-save Fields */}
         <label className="flex flex-col gap-1">
           <span className="font-semibold text-gray-800">Date of Birth</span>
           <input
             type="date"
             value={dob}
-            onChange={handleInputChange(setDob)}
+            onChange={(e) => setDob(e.target.value)}
             className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           />
         </label>
@@ -183,7 +193,7 @@ function EditProfile() {
           <span className="font-semibold text-gray-800">Gender</span>
           <select
             value={gender}
-            onChange={handleInputChange(setGender)}
+            onChange={(e) => setGender(e.target.value as "male" | "female" | "other")}
             className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
           >
             <option value="male">Male</option>
