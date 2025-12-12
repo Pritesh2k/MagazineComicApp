@@ -144,6 +144,45 @@ function Main() {
         right: "justify-end",
     }[alignment];
 
+    const [searchOpen, setSearchOpen] = useState(false);
+    const searchRef = useRef<HTMLDivElement>(null);
+    const overlayRef = useRef<HTMLDivElement>(null);
+
+    const openSearch = () => {
+        setSearchOpen(true);
+
+        requestAnimationFrame(() => {
+            gsap.to(overlayRef.current, {
+                opacity: 1,
+                duration: 0.4,
+                ease: "power3.out",
+            });
+
+            gsap.to(searchRef.current, {
+                y: 30,
+                opacity: 1,
+                duration: 0.5,
+                ease: "power3.out",
+            });
+        });
+    };
+
+    const closeSearch = () => {
+        gsap.to(searchRef.current, {
+            y: -120,
+            opacity: 0,
+            duration: 0.35,
+            ease: "power3.in",
+        });
+
+        gsap.to(overlayRef.current, {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.in",
+            onComplete: () => setSearchOpen(false),
+        });
+    };
+
     return (
         <div className="relative flex flex-col items-center w-screen h-screen overflow-hidden bg-white text-black">
 
@@ -190,9 +229,9 @@ function Main() {
                 {/* Expanded content */}
                 <div
                     ref={contentRef}
-                    className={`mt-4 text-sm w-full ${cardExpanded ? "opacity-100" : "hidden"}`}
+                    className={`-mt-15 text-sm w-full ${cardExpanded ? "opacity-100" : "hidden"} overflow-y-auto`}
                 >
-                    Description goes here and wraps nicely. This is the collapsed content. overflow? No problem! It should cut off and when expanded it should show all the text without any issues.
+                    Description goes here and wraps nicely. This is the collapsed content. Overflow? No problem! It should cut off and when expanded it should show all the text without any issues.
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
@@ -225,6 +264,7 @@ function Main() {
             {/* Search Button */}
             {(searchPosition === "left" || searchPosition === "right") && (
                 <button
+                    onClick={openSearch}
                     className="absolute bottom-11 w-10 h-10 rounded-full bg-white/50 backdrop-blur-xl shadow-lg 
             flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95"
                     style={{
@@ -246,6 +286,70 @@ function Main() {
                         />
                     </svg>
                 </button>
+            )}
+
+            {searchOpen && (
+                <>
+                    {/* DIM OVERLAY */}
+                    <div
+                        ref={overlayRef}
+                        onClick={closeSearch}
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                        style={{ opacity: 0 }}
+                    />
+
+                    {/* SEARCH PILL */}
+                    <div className="fixed top-0 left-0 w-full z-50 flex justify-center pt-6">
+                        <div
+                            ref={searchRef}
+                            className="w-[90%] max-w-[500px]
+                                bg-white/85 backdrop-blur-xl
+                                rounded-full shadow-xl
+                                px-5 py-3
+                                flex items-center gap-3
+                                will-change-transform"
+                            style={{
+                                transform: "translateY(-120px)",
+                                opacity: 0,
+                            }}
+                        >
+                            {/* Search Icon */}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-5 h-5 opacity-70"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="m21 21-5.197-5.197m0 0
+                        A7.5 7.5 0 1 0 5.196 5.196
+                        a7.5 7.5 0 0 0 10.607 10.607Z"
+                                />
+                            </svg>
+
+                            {/* Input */}
+                            <input
+                                autoFocus
+                                type="text"
+                                placeholder="Search..."
+                                className="flex-1 bg-transparent outline-none text-sm placeholder:text-gray-500"
+                            />
+
+                            {/* Close Button */}
+                            <button
+                                onClick={closeSearch}
+                                className="w-7 h-7 rounded-full bg-black/10 
+                    flex items-center justify-center hover:bg-black/20"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                </>
             )}
 
             {/* User Profile */}
