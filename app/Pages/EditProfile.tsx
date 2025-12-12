@@ -95,7 +95,7 @@ function EditProfile() {
   return (
     <div
       ref={containerRef}
-      className="bg-white w-full h-full p-6 flex flex-col gap-6 rounded-2xl overflow-y-auto"
+      className="bg-white/0 w-full h-full p-4 flex flex-col gap-6 overflow-y-auto"
     >
       <h2 className="text-xl text-center font-bold text-black">Edit Profile</h2>
 
