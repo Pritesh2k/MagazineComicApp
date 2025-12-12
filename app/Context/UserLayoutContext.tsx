@@ -4,16 +4,20 @@ import { createContext, useContext, useState } from "react";
 type ButtonId = "like" | "comment" | "view" | "next";
 type Alignment = "left" | "center" | "right";
 type SearchPosition = "left" | "right";
+type TextColor = "black" | "white";
 
 interface LayoutSettings {
     order: ButtonId[];
     alignment: Alignment;
     searchPosition: SearchPosition;
-    wallpaper: string; // <-- add wallpaper
+    textColor: TextColor;
+    wallpaper: string;
+
     setOrder: (order: ButtonId[]) => void;
     setAlignment: (alignment: Alignment) => void;
     setSearchPosition: (pos: SearchPosition) => void;
-    setWallpaper: (wallpaper: string) => void; // <-- add setter
+    setTextColor: (color: TextColor) => void;
+    setWallpaper: (wallpaper: string) => void;
 }
 
 const UserLayoutContext = createContext<LayoutSettings | null>(null);
@@ -22,7 +26,8 @@ export function UserLayoutProvider({ children }: { children: React.ReactNode }) 
     const [order, setOrder] = useState<ButtonId[]>(["like", "comment", "view", "next"]);
     const [alignment, setAlignment] = useState<Alignment>("center");
     const [searchPosition, setSearchPosition] = useState<SearchPosition>("right");
-    const [wallpaper, setWallpaper] = useState<string>(""); // <-- add wallpaper state
+    const [textColor, setTextColor] = useState<TextColor>("black");
+    const [wallpaper, setWallpaper] = useState<string>("");
 
     return (
         <UserLayoutContext.Provider
@@ -33,8 +38,10 @@ export function UserLayoutProvider({ children }: { children: React.ReactNode }) 
                 setAlignment,
                 searchPosition,
                 setSearchPosition,
-                wallpaper,       // <-- include wallpaper
-                setWallpaper,    // <-- include setter
+                textColor,
+                setTextColor,
+                wallpaper,
+                setWallpaper,
             }}
         >
             {children}

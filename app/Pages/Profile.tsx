@@ -71,7 +71,7 @@ function Profile() {
                 {/* profile picture */}
                 <button
                     className="
-                    absolute top-25 lg:top-35 left-1/2 -translate-x-1/2 z-10
+                    absolute top-30 lg:top-42 lg:-translate-x-2 z-10
                     w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
                     rounded-full shadow-md overflow-hidden
                 "
@@ -89,7 +89,7 @@ function Profile() {
             {/* CONTENT AREA – FLEX GROW, PERFECTLY CENTERED, SCROLLABLE */}
             <div className="flex w-full max-w-[500px] justify-center items-center">
                 <div
-                    className="w-full max-w-[500px] overflow-y-scroll mt-10 lg:mt-20 pb-2"
+                    className="w-full max-w-[500px] overflow-y-scroll mt-15 lg:mt-22 pb-2"
                     style={{
                         maxHeight: "calc(90vh - 30vh)", // adjust to leave space for header/footer/buttons
                         scrollBehavior: "smooth",

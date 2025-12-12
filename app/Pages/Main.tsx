@@ -184,7 +184,7 @@ function Main() {
                     className={`mt-3 text-sm w-full overflow-hidden transition-opacity duration-300 ${cardExpanded ? "opacity-0" : "line-clamp-1"
                         }`}
                 >
-                    Description goes here and wraps nicely...
+                    Description goes here and wraps nicely. This is the collapsed content. overflow? No problem! It should cut off and when expanded it should show all the text without any issues.
                 </div>
 
                 {/* Expanded content */}
@@ -192,13 +192,13 @@ function Main() {
                     ref={contentRef}
                     className={`mt-4 text-sm w-full ${cardExpanded ? "opacity-100" : "hidden"}`}
                 >
-                    Description goes here and wraps nicely. This is the expanded content.
+                    Description goes here and wraps nicely. This is the collapsed content. overflow? No problem! It should cut off and when expanded it should show all the text without any issues.
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
                             closeCard();
                         }}
-                        className="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-red-500 text-white rounded-lg shadow"
+                        className="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-gray-500 text-white rounded-lg shadow"
                     >
                         Close
                     </button>
@@ -272,15 +272,15 @@ function Main() {
                         <div className="flex justify-center items-center">
                             <button
                                 onClick={closeProfile}
-                                className="absolute bottom-10 w-8 h-8 rounded-full bg-white/50 backdrop-blur-xl shadow-lg 
+                                className="absolute bottom-10 w-8 h-8 rounded-full bg-white/30 backdrop-blur-xl shadow-lg 
                                     flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95 z-10">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
-                                    strokeWidth={1.25}
+                                    strokeWidth={1}
                                     stroke="currentColor"
-                                    className="w-6 h-6 text-red-500"
+                                    className="w-6 h-6 text-black"
                                 >
                                     <path
                                         strokeLinecap="round"

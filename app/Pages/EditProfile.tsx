@@ -3,10 +3,15 @@
 import React, { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useUser } from "../Context/UserContext";
+import { useUserLayout } from "../Context/UserLayoutContext"; // <-- import context
 
 function EditProfile() {
   const { user, setUser } = useUser();
+  const { textColor } = useUserLayout(); // <-- get textColor
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Map context color to Tailwind class
+  const textColorClass = textColor === "black" ? "text-black" : "text-white";
 
   // Form state
   const [firstName, setFirstName] = useState(user.firstName);
@@ -97,7 +102,8 @@ function EditProfile() {
       ref={containerRef}
       className="bg-white/0 w-full h-full p-4 flex flex-col gap-6 overflow-y-auto"
     >
-      <h2 className="text-xl text-center font-bold text-black">Edit Profile</h2>
+      {/* Apply dynamic text color */}
+      <h2 className={`text-xl text-center font-bold ${textColorClass}`}>Edit Profile</h2>
 
       {/* Profile Picture */}
       <div className="flex flex-col items-center gap-3 w-full">
@@ -136,7 +142,7 @@ function EditProfile() {
       <div className="flex flex-col gap-4 mt-4 mb-5">
         {/* Manual Save Fields */}
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-gray-800">First Name</span>
+          <span className={`font-semibold ${textColorClass}`}>First Name</span>
           <input
             type="text"
             value={firstName}
@@ -147,7 +153,7 @@ function EditProfile() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-gray-800">Username</span>
+          <span className={`font-semibold ${textColorClass}`}>Username</span>
           <input
             type="text"
             value={username}
@@ -158,7 +164,7 @@ function EditProfile() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-gray-800">Email</span>
+          <span className={`font-semibold ${textColorClass}`}>Email</span>
           <input
             type="email"
             value={email}
@@ -180,7 +186,7 @@ function EditProfile() {
 
         {/* Auto-save Fields */}
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-gray-800">Date of Birth</span>
+          <span className={`font-semibold ${textColorClass}`}>Date of Birth</span>
           <input
             type="date"
             value={dob}
@@ -190,7 +196,7 @@ function EditProfile() {
         </label>
 
         <label className="flex flex-col gap-1">
-          <span className="font-semibold text-gray-800">Gender</span>
+          <span className={`font-semibold ${textColorClass}`}>Gender</span>
           <select
             value={gender}
             onChange={(e) => setGender(e.target.value as "male" | "female" | "other")}
