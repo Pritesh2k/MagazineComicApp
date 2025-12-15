@@ -5,8 +5,13 @@ import { gsap } from "gsap";
 import Profile from "../Pages/Profile";
 import { useUserLayout } from "../Context/UserLayoutContext";
 import { useUser } from "../Context/UserContext";
+import TransitionWrapper from "../Context/TransitionWrapper";
 
-function Main() {
+type MainProps = {
+    onLogout?: () => void;
+};
+
+export default function Main({ onLogout }: MainProps) {
     const { user } = useUser();
     const [showProfile, setShowProfile] = useState(false);
     const modalRef = useRef<HTMLDivElement>(null);
@@ -395,12 +400,12 @@ function Main() {
                             </button>
 
                         </div>
-                        <Profile />
+                        <TransitionWrapper>
+                            <Profile onLogout={onLogout} />
+                        </TransitionWrapper>
                     </div>
                 </div>
             )}
         </div>
     );
 }
-
-export default Main;

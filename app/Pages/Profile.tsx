@@ -12,9 +12,13 @@ import { useUserLayout } from "../Context/UserLayoutContext";
 
 import TextPressure from "../../components/TextPressure";
 
-function Profile() {
+type ProfileProps = {
+    onLogout?: () => void;
+};
+
+function Profile({ onLogout }: ProfileProps) {
     const { user } = useUser();
-    const [activeTab, setActiveTab] = useState<"edit" | "gallery" | "settings" | null>("gallery");
+    const [activeTab, setActiveTab] = useState<"edit" | "gallery" | "settings">("gallery");
     const contentRef = useRef<HTMLDivElement>(null);
     const { wallpaper } = useUserLayout();
 
@@ -30,16 +34,18 @@ function Profile() {
 
     const renderContent = () => {
         switch (activeTab) {
-            case "edit":
-                return <EditProfile />;
-            case "gallery":
-                return <Gallery />;
-            case "settings":
-                return <Settings />;
-            default:
-                return null;
+            case "edit": return <EditProfile key="edit" />;
+            case "gallery": return <Gallery key="gallery" />;
+            case "settings": return <Settings key="settings" />;
+            default: return null;
         }
     };
+
+    useEffect(() => {
+        if (contentRef.current) {
+            gsap.fromTo(contentRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" });
+        }
+    }, [activeTab]);
 
     return (
         <div className="w-full h-screen flex flex-col items-center relative overflow-hidden">
@@ -118,7 +124,7 @@ function Profile() {
       w-12 h-12 rounded-full
       flex justify-center items-center text-[10px] md:text-sm
       shadow-md backdrop-blur-md transition-all duration-300
-      ${activeTab === 'edit' ? 'bg-black text-red-500' : 'bg-white/30 text-black'}
+      ${activeTab === 'edit' ? 'bg-red-700 text-white' : 'bg-white/30 text-black'}
     `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -133,7 +139,7 @@ function Profile() {
       w-12 h-12 rounded-full
       flex justify-center items-center text-[10px] md:text-sm
       shadow-md backdrop-blur-md transition-all duration-300
-      ${activeTab === 'gallery' ? 'bg-black text-red-500' : 'bg-white/30 text-black'}
+      ${activeTab === 'gallery' ? 'bg-red-700 text-white' : 'bg-white/30 text-black'}
     `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -148,7 +154,7 @@ function Profile() {
       w-12 h-12 rounded-full
       flex justify-center items-center text-[10px] md:text-sm
       shadow-md backdrop-blur-md transition-all duration-300
-      ${activeTab === 'settings' ? 'bg-black text-red-500' : 'bg-white/30 text-black'}
+      ${activeTab === 'settings' ? 'bg-red-700 text-white' : 'bg-white/30 text-black'}
     `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -156,6 +162,25 @@ function Profile() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
                     </button>
+
+                    {/* Logout Tab */}
+                    <button
+                        onClick={() => {
+                            localStorage.removeItem("currentUser"); // optional
+                            onLogout?.(); // trigger parent to switch to login
+                        }}
+                        className="
+                            w-12 h-12 rounded-full
+                            flex justify-center items-center text-[10px] md:text-sm
+                            shadow-md backdrop-blur-md transition-all duration-300
+                        "
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                        </svg>
+                    </button>
+
+
                 </div>
 
             </div>

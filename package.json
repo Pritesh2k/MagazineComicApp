@@ -9,13 +9,18 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "firebase": "^12.6.0",
+    "fs": "^0.0.1-security",
     "gsap": "^3.14.2",
     "lucide-react": "^0.561.0",
-    "next": "16.0.8",
+    "next": "^16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
+    "react-firebase-hooks": "^5.1.1",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
