@@ -1,145 +1,165 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 
-function EditProfile() {
-  const containerRef = useRef<HTMLDivElement>(null);
+export default function EditProfile() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Form state (just for display, no context updates)
   const [firstName, setFirstName] = useState("");
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [dob, setDob] = useState("");
-  const [gender, setGender] = useState<"male" | "female" | "other">("other");
-  const [profilePicFile, setProfilePicFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState("https://via.placeholder.com/150");
+  const [gender, setGender] = useState("");
+  const [profilePic, setProfilePic] = useState<string | null>(null);
 
-  const [labelText, setLabelText] = useState("Choose Profile Picture");
-  const [isImageSelected, setIsImageSelected] = useState(false);
-
-  // GSAP animation
+  /* ----------------------------------
+     GSAP ENTRY — FLY FROM BOTTOM
+  ---------------------------------- */
   useEffect(() => {
-    if (containerRef.current) {
-      gsap.from(containerRef.current.children, {
-        opacity: 0,
-        y: 20,
-        stagger: 0.05,
-        duration: 0.4,
-        ease: "power3.out",
-      });
-    }
+    if (!cardRef.current || !contentRef.current) return;
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power4.out" },
+    });
+
+    // Force visible (important for Next remounts)
+    gsap.set(cardRef.current, { opacity: 1 });
+    gsap.set(contentRef.current.children, { opacity: 0, y: 40 });
+
+    tl.from(cardRef.current, {
+      y: 120,
+      opacity: 0,
+      duration: 0.6,
+    }).to(
+      contentRef.current.children,
+      {
+        opacity: 1,
+        y: 0,
+        stagger: 0.08,
+        duration: 0.45,
+      },
+      "-=0.3"
+    );
   }, []);
 
-  const handleProfilePicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setProfilePicFile(file);
-      const previewURL = URL.createObjectURL(file);
-      setPreview(previewURL);
-      setLabelText("Image Selected!");
-      setIsImageSelected(true);
-
-      setTimeout(() => {
-        setLabelText("Choose Profile Picture");
-        setIsImageSelected(false);
-      }, 3000);
-    }
+    if (!file) return;
+    setProfilePic(URL.createObjectURL(file));
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="bg-white/0 w-full h-full p-4 flex flex-col gap-6 overflow-y-auto"
-    >
-      <h2 className="text-xl text-center font-bold text-black">Edit Profile</h2>
+    <div className="w-full flex justify-center p-4">
+      <div
+        ref={cardRef}
+        className="w-full max-w-md bg-white/80 backdrop-blur-md -mt-25"
+      >
+        <div ref={contentRef} className="flex flex-col gap-5">
+          {/* HEADER */}
+          <h2 className="text-2xl font-black text-center mb-5">
+            Your Profile
+          </h2>
 
-      {/* Profile Picture */}
-      <div className="flex flex-col items-center gap-3 w-full">
-        <img
-          src={preview}
-          alt="Profile Preview"
-          className="w-32 h-32 rounded-full object-cover border"
-        />
-        <input
-          id="profilePicInput"
-          type="file"
-          accept="image/*"
-          onChange={handleProfilePicChange}
-          className="hidden"
-        />
-        <label
-          htmlFor="profilePicInput"
-          className={`cursor-pointer px-4 py-2 rounded-md text-sm font-medium shadow text-center transition-colors
-            ${isImageSelected
-              ? "bg-green-200 text-green-800 hover:bg-green-300"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-            }`}
-        >
-          {labelText}
-        </label>
-      </div>
+          {/* PROFILE IMAGE */}
+          <div className="flex justify-center">
+            <label className="relative cursor-pointer group">
+              <div className="w-28 h-28 rounded-full overflow-hidden border border-red-700 shadow-md">
+                {profilePic ? (
+                  <img
+                    src={profilePic}
+                    className="w-full h-full object-cover"
+                    alt="Profile"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                    Upload
+                  </div>
+                )}
+              </div>
 
-      {/* Form Fields */}
-      <div className="flex flex-col gap-4 mt-4 mb-5">
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold text-black">First Name</span>
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="Enter first name"
-            className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-        </label>
+              <div className="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-xs">
+                Change
+              </div>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold text-black">Username</span>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter username"
-            className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-        </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                hidden
+              />
+            </label>
+          </div>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold text-black">Email</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter email"
-            className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-        </label>
+          {/* FIRST NAME */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              First Name
+            </label>
+            <input
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="John"
+              className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-red-500 outline-none"
+            />
+          </div>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold text-black">Date of Birth</span>
-          <input
-            type="date"
-            value={dob}
-            onChange={(e) => setDob(e.target.value)}
-            className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
-          />
-        </label>
+          {/* USERNAME */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Username
+            </label>
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="@johnny"
+              className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-red-500 outline-none"
+            />
+          </div>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-semibold text-black">Gender</span>
-          <select
-            value={gender}
-            onChange={(e) => setGender(e.target.value as "male" | "female" | "other")}
-            className="p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+          {/* DOB */}
+          <div>
+            <label className="block text-sm font-semibold mb-1">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              value={dob}
+              onChange={(e) => setDob(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-red-500 outline-none"
+            />
+          </div>
+
+          {/* GENDER */}
+          <div>
+            <label className="block text-sm font-semibold mb-2">
+              Gender
+            </label>
+            <div className="grid grid-cols-3 gap-3">
+              {["Male", "Female", "Other"].map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGender(g)}
+                  className={`py-2 rounded-lg border font-medium transition-all ${gender === g
+                    ? "bg-red-600 text-white scale-105"
+                    : "bg-white hover:bg-gray-100"
+                    }`}
+                >
+                  {g}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* SAVE */}
+          <button
+            className="w-full py-3 bg-red-600 text-white font-bold mb-5 rounded-xl shadow hover:bg-red-500 active:scale-95 transition"
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-        </label>
+            Save Profile
+          </button>
+        </div>
       </div>
     </div>
   );
 }
-
-export default EditProfile;

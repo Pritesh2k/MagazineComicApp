@@ -192,7 +192,7 @@ export default function Main({ onLogout }: MainProps) {
         <div className="relative flex flex-col items-center w-screen h-screen overflow-hidden bg-white text-black">
 
             {/* Main Post Area */}
-            <div className="absolute flex justify-center items-center w-screen h-screen bg-red-500">
+            <div className="absolute flex justify-center items-center w-screen h-screen">
                 This component is the users post
             </div>
 
@@ -201,7 +201,7 @@ export default function Main({ onLogout }: MainProps) {
                 <img
                     src="/author.jpg"
                     alt="Author PP"
-                    className="w-20 h-20 rounded-full border-2 border-black shadow-lg object-cover"
+                    className="w-20 h-20 rounded-full border border-red-700 shadow-lg object-cover"
                 />
                 <div className="mt-2 font-semibold text-lg tracking-wide text-center">
                     Author Name
@@ -215,6 +215,7 @@ export default function Main({ onLogout }: MainProps) {
        w-[95%] max-w-[500px]
        bg-white/40 backdrop-blur-md
        text-black p-4 rounded-2xl shadow-lg
+       border border-red-700
        flex flex-col items-start cursor-pointer`} // <-- make parent relative
                 onClick={() => !cardExpanded && openCard()}
             >
@@ -242,7 +243,7 @@ export default function Main({ onLogout }: MainProps) {
                             e.stopPropagation();
                             closeCard();
                         }}
-                        className="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-gray-500 text-white rounded-lg shadow"
+                        className="absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 bg-red-700 font-semibold text-white rounded-lg shadow"
                     >
                         Close
                     </button>
@@ -258,7 +259,7 @@ export default function Main({ onLogout }: MainProps) {
                         <button
                             key={buttonMap[btn].id}
                             onClick={() => setLiked(btn === "like" ? !liked : liked)}
-                            className="w-12 h-12 rounded-full bg-white/70 backdrop-blur-xl shadow-lg flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95"
+                            className="w-12 h-12 rounded-full bg-white text-red-700 border border-red-700 backdrop-blur-xl shadow-lg flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95"
                         >
                             {btn === "like" ? buttonMap[btn].icon : buttonMap[btn].icon}
                         </button>
@@ -270,8 +271,8 @@ export default function Main({ onLogout }: MainProps) {
             {(searchPosition === "left" || searchPosition === "right") && (
                 <button
                     onClick={openSearch}
-                    className="absolute bottom-11 w-10 h-10 rounded-full bg-white/50 backdrop-blur-xl shadow-lg 
-            flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95"
+                    className="absolute bottom-11 w-10 h-10 rounded-full bg-red-700 text-white border backdrop-blur-xl shadow-lg 
+            flex items-center justify-center transition-all duration-200 hover:bg-white hover:text-red-700 hover:border-red-700 active:scale-95"
                     style={{
                         left: searchPosition === "left" ? "calc(50% - 9rem)" : "calc(50% + 6rem)",
                     }}
@@ -312,6 +313,7 @@ export default function Main({ onLogout }: MainProps) {
                                 rounded-full shadow-xl
                                 px-5 py-3
                                 flex items-center gap-3
+                                border border-red-700
                                 will-change-transform"
                             style={{
                                 transform: "translateY(-120px)",
@@ -325,7 +327,7 @@ export default function Main({ onLogout }: MainProps) {
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="w-5 h-5 opacity-70"
+                                className="w-5 h-5 opacity-70 text-red-700"
                             >
                                 <path
                                     strokeLinecap="round"
@@ -347,8 +349,8 @@ export default function Main({ onLogout }: MainProps) {
                             {/* Close Button */}
                             <button
                                 onClick={closeSearch}
-                                className="w-7 h-7 rounded-full bg-black/10 
-                    flex items-center justify-center hover:bg-black/20"
+                                className="w-7 h-7 rounded-full bg-red-700 
+                    flex items-center justify-center text-white hover:bg-white hover:text-red-700"
                             >
                                 ✕
                             </button>
@@ -360,7 +362,7 @@ export default function Main({ onLogout }: MainProps) {
             {/* User Profile */}
             <button
                 onClick={openProfile}
-                className="absolute left-1/2 -translate-x-1/2 bottom-8 w-16 h-16 rounded-full overflow-hidden border-2 border-gray-300 shadow-md"
+                className="absolute left-1/2 -translate-x-1/2 bottom-8 w-16 h-16 rounded-full overflow-hidden border border-red-700 shadow-md"
             >
                 {user.profilePic ? (
                     <img src={user.profilePic} alt="User" className="w-full h-full object-cover" />
@@ -376,12 +378,12 @@ export default function Main({ onLogout }: MainProps) {
                 <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-end justify-center z-50">
                     <div
                         ref={modalRef}
-                        className="w-full h-full opacity-0 bg-white rounded-t-3xl shadow-lg"
+                        className="w-full h-full opacity-0 rounded-t-3xl shadow-lg"
                     >
                         <div className="flex justify-center items-center">
                             <button
                                 onClick={closeProfile}
-                                className="absolute bottom-10 w-8 h-8 rounded-full bg-white/30 backdrop-blur-xl shadow-lg 
+                                className="absolute bottom-8 w-12 h-12 rounded-full bg-white border border-red-700 backdrop-blur-xl shadow-lg 
                                     flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95 z-10">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

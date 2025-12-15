@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 
 import Gallery from "./Gallery";
@@ -51,7 +51,7 @@ function Profile({ onLogout }: ProfileProps) {
         <div className="w-full h-screen flex flex-col items-center relative overflow-hidden">
 
             {/* Wallpaper */}
-            <div className="absolute inset-0 -z-10">
+            <div className="absolute bg-white inset-0 -z-10">
                 {wallpaper && (
                     <img
                         src={wallpaper}
@@ -80,6 +80,7 @@ function Profile({ onLogout }: ProfileProps) {
                     absolute top-30 lg:top-42 lg:-translate-x-2 z-10
                     w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28
                     rounded-full shadow-md overflow-hidden
+                    border border-red-700
                 "
                 >
                     {user.profilePic ? (
@@ -112,7 +113,7 @@ function Profile({ onLogout }: ProfileProps) {
                 className="
                 w-[95vw] md:w-[70vw] lg:w-[50vw] xl:w-[40vw]
                 h-32 flex items-start justify-around
-                p-5 rounded-2xl bg-white/0
+                p-5 rounded-2xl
                 absolute bottom-5 left-1/2 -translate-x-1/2
             "
             >
@@ -124,7 +125,8 @@ function Profile({ onLogout }: ProfileProps) {
       w-12 h-12 rounded-full
       flex justify-center items-center text-[10px] md:text-sm
       shadow-md backdrop-blur-md transition-all duration-300
-      ${activeTab === 'edit' ? 'bg-red-700 text-white' : 'bg-white/30 text-black'}
+      border border-red-700
+      ${activeTab === 'edit' ? 'bg-red-700 text-white' : 'bg-white text-black'}
     `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -138,8 +140,8 @@ function Profile({ onLogout }: ProfileProps) {
                         className={`
       w-12 h-12 rounded-full
       flex justify-center items-center text-[10px] md:text-sm
-      shadow-md backdrop-blur-md transition-all duration-300
-      ${activeTab === 'gallery' ? 'bg-red-700 text-white' : 'bg-white/30 text-black'}
+      shadow-md backdrop-blur-md transition-all duration-300 border border-red-700
+      ${activeTab === 'gallery' ? 'bg-red-700 text-white' : 'bg-white text-black'}
     `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -154,7 +156,8 @@ function Profile({ onLogout }: ProfileProps) {
       w-12 h-12 rounded-full
       flex justify-center items-center text-[10px] md:text-sm
       shadow-md backdrop-blur-md transition-all duration-300
-      ${activeTab === 'settings' ? 'bg-red-700 text-white' : 'bg-white/30 text-black'}
+      border border-red-700
+      ${activeTab === 'settings' ? 'bg-red-700 text-white' : 'bg-white text-black'}
     `}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -172,6 +175,7 @@ function Profile({ onLogout }: ProfileProps) {
                         className="
                             w-12 h-12 rounded-full
                             flex justify-center items-center text-[10px] md:text-sm
+                            bg-white border border-red-700 text-red-700
                             shadow-md backdrop-blur-md transition-all duration-300
                         "
                     >
@@ -179,12 +183,8 @@ function Profile({ onLogout }: ProfileProps) {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
                         </svg>
                     </button>
-
-
                 </div>
-
             </div>
-
         </div>
     );
 }
