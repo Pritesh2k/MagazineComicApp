@@ -4,6 +4,7 @@ import { useState } from "react";
 import Main from "./Pages/Main";
 import StartupPage from "./Pages/StartupPage";
 import TransitionWrapper from "./Context/TransitionWrapper";
+import Swiper from "./Pages/Swiper";
 
 export default function Home() {
   const [authenticated, setAuthenticated] = useState(false);
