@@ -22,6 +22,11 @@ function Profile({ onLogout }: ProfileProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const { wallpaper } = useUserLayout();
 
+    const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+    const logoutMaskRef = useRef<HTMLDivElement>(null);
+    const logoutCardRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         if (contentRef.current) {
             gsap.fromTo(
@@ -46,6 +51,55 @@ function Profile({ onLogout }: ProfileProps) {
             gsap.fromTo(contentRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" });
         }
     }, [activeTab]);
+
+    const openLogoutConfirm = () => {
+        setShowLogoutConfirm(true);
+
+        requestAnimationFrame(() => {
+            if (!logoutMaskRef.current || !logoutCardRef.current) return;
+
+            gsap.set(logoutMaskRef.current, { scaleY: 1, transformOrigin: "bottom" });
+            gsap.set(logoutCardRef.current, { opacity: 0, y: 40 });
+
+            gsap.timeline({ defaults: { ease: "expo.out" } })
+                .fromTo(
+                    logoutMaskRef.current,
+                    { scaleY: 0 },
+                    { scaleY: 1, duration: 0.8 }
+                )
+                .to(
+                    logoutCardRef.current,
+                    { opacity: 1, y: 0, duration: 0.4 },
+                    "-=0.2"
+                );
+        });
+    };
+
+    const closeLogoutConfirm = () => {
+        if (!logoutMaskRef.current || !logoutCardRef.current) return;
+
+        gsap.timeline({
+            defaults: { ease: "expo.inOut" },
+            onComplete: () => setShowLogoutConfirm(false),
+        })
+            .to(logoutCardRef.current, { opacity: 0, y: 30, duration: 0.3 })
+            .to(logoutMaskRef.current, { scaleY: 0, duration: 0.6 }, "-=0.1");
+    };
+
+    const confirmLogout = () => {
+        if (!logoutMaskRef.current) return;
+
+        gsap.to(logoutMaskRef.current, {
+            scaleY: 1,
+            transformOrigin: "top",
+            duration: 0.5,
+            ease: "expo.in",
+            onComplete: () => {
+                localStorage.removeItem("currentUser");
+                onLogout?.();
+            },
+        });
+    };
 
     return (
         <div className="w-full h-screen flex flex-col items-center relative overflow-hidden">
@@ -170,7 +224,7 @@ function Profile({ onLogout }: ProfileProps) {
                     <button
                         onClick={() => {
                             localStorage.removeItem("currentUser"); // optional
-                            onLogout?.(); // trigger parent to switch to login
+                            openLogoutConfirm();
                         }}
                         className="
                             w-12 h-12 rounded-full
@@ -185,6 +239,49 @@ function Profile({ onLogout }: ProfileProps) {
                     </button>
                 </div>
             </div>
+            {showLogoutConfirm && (
+                <div className="absolute inset-0 z-50 flex items-center justify-center">
+                    {/* RED MASK */}
+                    <div
+                        ref={logoutMaskRef}
+                        className="absolute inset-0 bg-red-700"
+                        style={{ transformOrigin: "bottom" }}
+                    />
+
+                    {/* CONFIRM CARD */}
+                    <div
+                        ref={logoutCardRef}
+                        className="
+        relative z-10
+        bg-white rounded-2xl
+        p-6 w-[85%] max-w-sm
+        shadow-xl text-center
+      "
+                    >
+                        <h2 className="text-2xl font-black mb-2">Log out?</h2>
+                        <p className="text-sm text-gray-500 mb-6">
+                            You’ll need to log back in to continue.
+                        </p>
+
+                        <div className="flex gap-3">
+                            <button
+                                onClick={closeLogoutConfirm}
+                                className="flex-1 py-3 rounded-lg border border-red-700 font-semibold"
+                            >
+                                Stay
+                            </button>
+
+                            <button
+                                onClick={confirmLogout}
+                                className="flex-1 py-3 rounded-lg bg-red-700 text-white font-semibold"
+                            >
+                                Log out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

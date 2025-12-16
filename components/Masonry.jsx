@@ -48,14 +48,14 @@ const preloadImages = async urls => {
 
 const Masonry = ({
   items,
-  ease = 'power3.out',
-  duration = 0.6,
+  ease = 'power4.out',
+  duration = 0.1,
   stagger = 0.05,
   animateFrom = 'bottom',
   scaleOnHover = true,
   hoverScale = 0.95,
   blurToFocus = true,
-  colorShiftOnHover = false
+  colorShiftOnHover = true
 }) => {
   const columns = useMedia(
     ['(min-width:1500px)', '(min-width:1000px)', '(min-width:600px)', '(min-width:400px)'],

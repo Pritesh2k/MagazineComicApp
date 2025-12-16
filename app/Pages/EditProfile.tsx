@@ -30,13 +30,12 @@ export default function EditProfile() {
     tl.from(cardRef.current, {
       y: 120,
       opacity: 0,
-      duration: 0.6,
+      duration: 0.1,
     }).to(
       contentRef.current.children,
       {
         opacity: 1,
         y: 0,
-        stagger: 0.08,
         duration: 0.45,
       },
       "-=0.3"
@@ -49,10 +48,14 @@ export default function EditProfile() {
     setProfilePic(URL.createObjectURL(file));
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <div className="w-full flex justify-center p-4">
-      <div
-        ref={cardRef}
+      <form ref={cardRef}
+        onSubmit={handleSubmit}
         className="w-full max-w-md bg-white/80 backdrop-blur-md -mt-25"
       >
         <div ref={contentRef} className="flex flex-col gap-5">
@@ -159,7 +162,7 @@ export default function EditProfile() {
             Save Profile
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

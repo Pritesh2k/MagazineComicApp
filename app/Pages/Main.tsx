@@ -6,6 +6,7 @@ import Profile from "../Pages/Profile";
 import { useUserLayout } from "../Context/UserLayoutContext";
 import { useUser } from "../Context/UserContext";
 import TransitionWrapper from "../Context/TransitionWrapper";
+import Swiper from "./Swiper";
 
 type MainProps = {
     onLogout?: () => void;
@@ -193,7 +194,7 @@ export default function Main({ onLogout }: MainProps) {
 
             {/* Main Post Area */}
             <div className="absolute flex justify-center items-center w-screen h-screen">
-                This component is the users post
+                <Swiper />
             </div>
 
             {/* Author Avatar */}
@@ -385,20 +386,18 @@ export default function Main({ onLogout }: MainProps) {
                                 onClick={closeProfile}
                                 className="absolute bottom-8 w-12 h-12 rounded-full bg-white border border-red-700 backdrop-blur-xl shadow-lg 
                                     flex items-center justify-center transition-all duration-200 hover:bg-white active:scale-95 z-10">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={1}
-                                    stroke="currentColor"
-                                    className="w-6 h-6 text-black"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
-                                    />
-                                </svg>
+                                <a
+                                    className="
+                                        w-[5vw] h-[5vw]
+                                        rounded-sm
+                                        bg-white
+                                        border-2 border-red-500
+                                        shadow-[0_0_8px_rgba(239,68,68,0.5),0_0_20px_rgba(255,255,255,0.2)]
+                                        hover:shadow-[0_0_12px_rgba(239,68,68,0.9),0_0_28px_rgba(239,68,68,0.7)]
+                                        transition-all duration-300
+                                    "
+                                />
+
                             </button>
 
                         </div>
